@@ -1,0 +1,12 @@
+{
+  "name": "rlm-rs",
+  "version": "0.1.0",
+  "description": "Recursive Language Model integration for Claude Code using rlm-rs CLI. Enables processing documents far exceeding context windows via chunking and recursive sub-LLM calls.",
+  "author": {
+    "name": "zircote",
+    "url": "https://github.com/zircote"
+  },
+  "repository": "https://github.com/zircote/RLM-Research",
+  "license": "MIT",
+  "keywords": ["rlm", "chunking", "long-context", "recursive", "llm"]
+}

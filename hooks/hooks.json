@@ -1,0 +1,14 @@
+{
+  "SessionStart": [
+    {
+      "matcher": ".*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "bash -c 'if command -v rlm-rs &> /dev/null; then echo \"[rlm-rs] $(rlm-rs --version)\"; else echo \"[rlm-rs] WARNING: Not installed. Run: cargo install rlm-rs\"; fi'",
+          "timeout": 5
+        }
+      ]
+    }
+  ]
+}

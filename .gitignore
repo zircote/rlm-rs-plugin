@@ -1,0 +1,8 @@
+# RLM state
+.rlm/
+
+# Plugin local settings
+.claude/*.local.md
+
+# OS files
+.DS_Store
