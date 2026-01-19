@@ -9,7 +9,7 @@ Thank you for your interest in contributing to the rlm-rs Claude Code plugin.
 1. **Claude Code** with plugin support
 2. **rlm-rs CLI** installed:
    ```bash
-   cargo install rlm-rs
+   cargo install --git https://github.com/zircote/rlm rlm-rs
    ```
 3. Familiarity with [Claude Code plugin structure](https://docs.anthropic.com/en/docs/claude-code/plugins)
 
@@ -17,25 +17,16 @@ Thank you for your interest in contributing to the rlm-rs Claude Code plugin.
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/zircote/RLM-Research.git
-   cd RLM-Research/rlm-rs-plugin
+   git clone https://github.com/zircote/rlm-rs-plugin.git
+   cd rlm-rs-plugin
    ```
 
-2. Symlink to Claude Code plugins directory:
+2. Run Claude Code with the plugin directory:
    ```bash
-   ln -s "$(pwd)" ~/.claude/plugins/rlm-rs-dev
+   claude --plugin-dir .
    ```
 
-3. Restart Claude Code to load the plugin:
-   ```bash
-   claude --plugin-dir ~/.claude/plugins
-   ```
-
-4. Verify loading:
-   ```
-   /help
-   ```
-   You should see `rlm-rs:rlm-init` and other commands.
+3. Verify loading by running `/help` - you should see `rlm-rs:rlm-init` and other commands.
 
 ## Project Structure
 
@@ -252,8 +243,8 @@ Follow conventional commits:
 
 ## Getting Help
 
-- **Issues**: [GitHub Issues](https://github.com/zircote/RLM-Research/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/zircote/RLM-Research/discussions)
+- **Issues**: [GitHub Issues](https://github.com/zircote/rlm-rs-plugin/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/zircote/rlm-rs-plugin/discussions)
 
 ## License
 

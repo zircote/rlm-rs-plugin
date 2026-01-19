@@ -22,37 +22,44 @@ This plugin enables Claude Code to:
 
 ## Prerequisites
 
-1. **rlm-rs CLI**: Install via one of these methods:
-   ```bash
-   # Via Cargo (recommended)
-   cargo install rlm-rs
+**rlm-rs CLI** must be installed:
 
-   # Via Homebrew
-   brew tap zircote/tap
-   brew install rlm-rs
+```bash
+# Via Cargo (recommended)
+cargo install --git https://github.com/zircote/rlm rlm-rs
 
-   # From source
-   cd ../rlm && make install
-   ```
-
-2. **Claude Code**: Version supporting plugins
+# Via Homebrew
+brew install zircote/tap/rlm-rs
+```
 
 ## Installation
 
-1. Copy or symlink this plugin to your Claude Code plugins directory:
-   ```bash
-   # Option 1: Symlink (recommended for development)
-   ln -s /path/to/rlm-rs-plugin ~/.claude/plugins/rlm-rs
+### From Marketplace
 
-   # Option 2: Use --plugin-dir flag
-   claude --plugin-dir /path/to/rlm-rs-plugin
-   ```
+```bash
+# Add the zircote marketplace (if not already added)
+claude plugin marketplace add zircote https://github.com/zircote/marketplace
 
-2. Verify the plugin loads:
-   ```bash
-   /help
-   ```
-   You should see `rlm-rs:rlm-init`, `rlm-rs:rlm-load`, etc.
+# Install the plugin
+claude plugin install rlm-rs@zircote
+```
+
+### From GitHub
+
+```bash
+claude plugin install zircote/rlm-rs-plugin
+```
+
+### For Development
+
+```bash
+# Use --plugin-dir flag for local development
+claude --plugin-dir /path/to/rlm-rs-plugin
+```
+
+### Verify Installation
+
+Run `/help` in Claude Code - you should see `rlm-rs:rlm-init`, `rlm-rs:rlm-load`, etc.
 
 ## Components
 
