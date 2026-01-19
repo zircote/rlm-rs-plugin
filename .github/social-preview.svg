@@ -1,0 +1,101 @@
+<svg width="1280" height="640" viewBox="0 0 1280 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="50%" style="stop-color:#1e293b"/>
+      <stop offset="100%" style="stop-color:#0f172a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f97316"/>
+      <stop offset="100%" style="stop-color:#fb923c"/>
+    </linearGradient>
+    <linearGradient id="rust" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#b7410e"/>
+      <stop offset="100%" style="stop-color:#ce422b"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1280" height="640" fill="url(#bg)"/>
+
+  <!-- Decorative grid pattern -->
+  <g opacity="0.05">
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#f97316" stroke-width="1"/>
+    </pattern>
+    <rect width="1280" height="640" fill="url(#grid)"/>
+  </g>
+
+  <!-- Decorative circles representing chunks -->
+  <g opacity="0.15">
+    <circle cx="150" cy="120" r="60" fill="#f97316"/>
+    <circle cx="280" cy="180" r="45" fill="#fb923c"/>
+    <circle cx="180" cy="250" r="35" fill="#fdba74"/>
+    <circle cx="1100" cy="480" r="70" fill="#f97316"/>
+    <circle cx="1180" cy="400" r="40" fill="#fb923c"/>
+    <circle cx="1050" cy="540" r="30" fill="#fdba74"/>
+  </g>
+
+  <!-- Connection lines representing recursion -->
+  <g stroke="#f97316" stroke-width="2" opacity="0.2">
+    <path d="M 150 120 Q 300 200 280 180"/>
+    <path d="M 280 180 Q 200 280 180 250"/>
+    <path d="M 1100 480 Q 1150 420 1180 400"/>
+    <path d="M 1100 480 Q 1060 520 1050 540"/>
+  </g>
+
+  <!-- Main content area -->
+  <g transform="translate(100, 180)">
+    <!-- Plugin icon representation -->
+    <g transform="translate(0, 60)">
+      <!-- Document stack -->
+      <rect x="0" y="20" width="80" height="100" rx="8" fill="#334155" stroke="#475569" stroke-width="2"/>
+      <rect x="10" y="10" width="80" height="100" rx="8" fill="#475569" stroke="#64748b" stroke-width="2"/>
+      <rect x="20" y="0" width="80" height="100" rx="8" fill="#64748b" stroke="#94a3b8" stroke-width="2"/>
+
+      <!-- Arrow indicating processing -->
+      <path d="M 130 50 L 180 50 L 165 35 M 180 50 L 165 65" stroke="url(#accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+      <!-- Chunk representation -->
+      <g transform="translate(210, 0)">
+        <rect x="0" y="0" width="30" height="30" rx="4" fill="url(#rust)"/>
+        <rect x="40" y="0" width="30" height="30" rx="4" fill="url(#rust)"/>
+        <rect x="0" y="40" width="30" height="30" rx="4" fill="url(#rust)"/>
+        <rect x="40" y="40" width="30" height="30" rx="4" fill="url(#rust)"/>
+        <rect x="0" y="80" width="30" height="30" rx="4" fill="url(#rust)"/>
+        <rect x="40" y="80" width="30" height="30" rx="4" fill="url(#rust)"/>
+      </g>
+    </g>
+
+    <!-- Title -->
+    <text x="380" y="40" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="bold" fill="#f8fafc">rlm-rs-plugin</text>
+
+    <!-- Subtitle -->
+    <text x="380" y="100" font-family="system-ui, -apple-system, sans-serif" font-size="28" fill="#94a3b8">Claude Code Plugin</text>
+
+    <!-- Description -->
+    <text x="380" y="170" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#cbd5e1">Process documents 100x larger than context limits</text>
+    <text x="380" y="210" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#cbd5e1">using Recursive Language Model pattern</text>
+  </g>
+
+  <!-- Feature badges at bottom -->
+  <g transform="translate(100, 500)">
+    <rect x="0" y="0" width="180" height="44" rx="22" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+    <text x="90" y="28" font-family="system-ui, -apple-system, sans-serif" font-size="16" fill="#f97316" text-anchor="middle">Rust CLI Backend</text>
+
+    <rect x="200" y="0" width="200" height="44" rx="22" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+    <text x="300" y="28" font-family="system-ui, -apple-system, sans-serif" font-size="16" fill="#f97316" text-anchor="middle">Semantic Chunking</text>
+
+    <rect x="420" y="0" width="180" height="44" rx="22" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+    <text x="510" y="28" font-family="system-ui, -apple-system, sans-serif" font-size="16" fill="#f97316" text-anchor="middle">SQLite Storage</text>
+
+    <rect x="620" y="0" width="180" height="44" rx="22" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+    <text x="710" y="28" font-family="system-ui, -apple-system, sans-serif" font-size="16" fill="#f97316" text-anchor="middle">Sub-LLM Agents</text>
+  </g>
+
+  <!-- GitHub corner -->
+  <g transform="translate(1180, 540)">
+    <text font-family="system-ui, -apple-system, sans-serif" font-size="18" fill="#64748b">zircote/rlm-rs-plugin</text>
+  </g>
+</svg>
