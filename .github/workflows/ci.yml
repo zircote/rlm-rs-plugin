@@ -1,0 +1,114 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    name: Validate Plugin
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate plugin.json
+        run: |
+          echo "Validating plugin.json..."
+          if ! jq empty .claude-plugin/plugin.json 2>/dev/null; then
+            echo "Error: Invalid JSON in plugin.json"
+            exit 1
+          fi
+          echo "plugin.json is valid JSON"
+
+      - name: Check required files exist
+        run: |
+          echo "Checking required plugin files..."
+          required_files=(
+            ".claude-plugin/plugin.json"
+            "README.md"
+          )
+          for file in "${required_files[@]}"; do
+            if [[ ! -f "$file" ]]; then
+              echo "Error: Required file missing: $file"
+              exit 1
+            fi
+            echo "✓ $file"
+          done
+
+      - name: Validate YAML frontmatter in skills
+        run: |
+          echo "Validating skill frontmatter..."
+          for file in skills/*/SKILL.md; do
+            if [[ -f "$file" ]]; then
+              echo "Checking $file..."
+              # Extract frontmatter and validate
+              if ! head -50 "$file" | sed -n '/^---$/,/^---$/p' | grep -q "name:"; then
+                echo "Error: Missing 'name' in frontmatter of $file"
+                exit 1
+              fi
+              if ! head -50 "$file" | sed -n '/^---$/,/^---$/p' | grep -q "description:"; then
+                echo "Error: Missing 'description' in frontmatter of $file"
+                exit 1
+              fi
+              echo "✓ $file"
+            fi
+          done
+
+      - name: Validate YAML frontmatter in agents
+        run: |
+          echo "Validating agent frontmatter..."
+          for file in agents/*.md; do
+            if [[ -f "$file" ]]; then
+              echo "Checking $file..."
+              if ! head -50 "$file" | sed -n '/^---$/,/^---$/p' | grep -q "name:"; then
+                echo "Error: Missing 'name' in frontmatter of $file"
+                exit 1
+              fi
+              if ! head -50 "$file" | sed -n '/^---$/,/^---$/p' | grep -q "description:"; then
+                echo "Error: Missing 'description' in frontmatter of $file"
+                exit 1
+              fi
+              echo "✓ $file"
+            fi
+          done
+
+      - name: Validate YAML frontmatter in commands
+        run: |
+          echo "Validating command frontmatter..."
+          for file in commands/*.md; do
+            if [[ -f "$file" ]]; then
+              echo "Checking $file..."
+              if ! head -50 "$file" | sed -n '/^---$/,/^---$/p' | grep -q "name:"; then
+                echo "Error: Missing 'name' in frontmatter of $file"
+                exit 1
+              fi
+              if ! head -50 "$file" | sed -n '/^---$/,/^---$/p' | grep -q "description:"; then
+                echo "Error: Missing 'description' in frontmatter of $file"
+                exit 1
+              fi
+              echo "✓ $file"
+            fi
+          done
+
+      - name: Check for broken internal links
+        run: |
+          echo "Checking for broken internal links..."
+          for mdfile in $(find . -name "*.md" -not -path "./.git/*"); do
+            # Extract markdown links like [text](path)
+            grep -oE '\[([^\]]+)\]\(([^)]+)\)' "$mdfile" 2>/dev/null | while read -r link; do
+              path=$(echo "$link" | sed 's/.*(\([^)]*\))/\1/' | sed 's/#.*//')
+              # Skip URLs and anchors
+              if [[ "$path" =~ ^https?:// ]] || [[ "$path" =~ ^# ]] || [[ -z "$path" ]]; then
+                continue
+              fi
+              # Resolve relative path
+              dir=$(dirname "$mdfile")
+              full_path="$dir/$path"
+              if [[ ! -f "$full_path" ]] && [[ ! -d "$full_path" ]]; then
+                echo "Warning: Broken link in $mdfile: $path"
+              fi
+            done
+          done
+          echo "Link check complete"
