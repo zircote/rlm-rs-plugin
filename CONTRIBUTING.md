@@ -150,8 +150,8 @@ color: cyan|green|blue|etc
    # Test a skill by describing intent
    "I need to process a large log file using RLM"
 
-   # Test an agent via Task tool
-   "Analyze this chunk file: .rlm/chunks/chunk_0001.txt"
+   # Test an agent via Task tool (pass chunk ID from search results)
+   "Analyze chunk ID 42 from the loaded buffer"
    ```
 
 ### Test Scenarios
