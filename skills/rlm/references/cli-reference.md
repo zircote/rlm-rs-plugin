@@ -222,7 +222,7 @@ Arguments:
   <QUERY>    Search query text
 
 Options:
-  -k, --top-k <N>          Maximum results [default: 10]
+  -k, --top-k <N>          Maximum results [default: 100]
   -t, --threshold <F>      Minimum similarity threshold 0.0-1.0 [default: 0.3]
   -m, --mode <MODE>        Search mode: hybrid, semantic, bm25 [default: hybrid]
       --rrf-k <N>          RRF k parameter for rank fusion [default: 60]
@@ -241,7 +241,7 @@ rlm-rs search "database connection patterns" --mode semantic
 rlm-rs search "API endpoints" --buffer docs --top-k 5
 
 # JSON output for programmatic use
-rlm-rs --format json search "your query" --top-k 10
+rlm-rs --format json search "your query" --top-k 100
 ```
 
 **Output (JSON format):**

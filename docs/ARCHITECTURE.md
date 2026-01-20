@@ -73,7 +73,7 @@ The RLM pattern enables processing of documents that far exceed LLM context wind
    │  rlm-rs load <file> --chunker <strategy>
    ▼
 5. CLI: Search for Relevant Chunks
-   │  rlm-rs search "<query>" --buffer <name> --top-k 10
+   │  rlm-rs search "<query>" --buffer <name> --top-k 100
    │  (Embeddings generated automatically on first search)
    ▼
 6. Subcall Loop (targeted, parallel)

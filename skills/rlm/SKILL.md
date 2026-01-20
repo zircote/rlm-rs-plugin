@@ -92,10 +92,10 @@ Use hybrid semantic + BM25 search to find chunks matching your query:
 
 ```bash
 # Hybrid search (semantic + BM25 with rank fusion)
-rlm-rs search "your query" --buffer <buffer_name> --top-k 10
+rlm-rs search "your query" --buffer <buffer_name> --top-k 100
 
 # JSON output for programmatic use
-rlm-rs --format json search "your query" --top-k 10
+rlm-rs --format json search "your query" --top-k 100
 ```
 
 Output includes chunk IDs with relevance scores:
@@ -130,7 +130,7 @@ rlm-rs --format json chunk get 42 --metadata
 Only process chunks returned by search. Batch chunk IDs to reduce agent calls:
 
 1. Search returns chunk IDs with relevance scores
-2. Group chunk IDs into batches of 5 (e.g., [1,2,3,4,5], [6,7,8,9,10], [11,12])
+2. Group chunk IDs into batches (default 20, configurable via `batch_size` argument)
 3. Invoke `rlm-subcall` agent once per batch using **only** the two required arguments
 4. Launch batches in parallel via multiple Task calls in one response
 5. Agent handles retrieval internally via `rlm-rs chunk get <id>` (NO buffer ID needed)
@@ -225,7 +225,7 @@ rlm-rs init
 rlm-rs load server.log --name logs --chunker fixed --chunk-size 50000 --overlap 500
 
 # 3. Search for relevant chunks
-rlm-rs --format json search "database connection errors" --buffer logs --top-k 10
+rlm-rs --format json search "database connection errors" --buffer logs --top-k 100
 
 # 4. For each relevant chunk ID, invoke rlm-subcall agent
 # 5. Collect JSON findings

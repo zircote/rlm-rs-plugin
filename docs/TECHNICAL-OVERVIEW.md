@@ -160,7 +160,7 @@ Example tool definition (generic):
   "description": "Search loaded documents using hybrid semantic + BM25",
   "parameters": {
     "query": "Search query text",
-    "top_k": "Maximum results (default: 10)",
+    "top_k": "Maximum results (default: 100)",
     "buffer": "Filter by buffer name"
   },
   "command": "rlm-rs --format json search \"$query\" --top-k $top_k"
