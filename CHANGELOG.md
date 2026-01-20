@@ -7,8 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2025-01-19
+
 ### Added
 - Technical overview documentation explaining RLM implementation, hybrid search, and architecture
+
+### Changed
+- Updated chunk size defaults in documentation to match rlm-rs 1.1.2
 
 ## [1.0.0] - 2025-01-19
 
@@ -44,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI workflow for plugin validation
 - Basic documentation
 
-[Unreleased]: https://github.com/zircote/rlm-rs-plugin/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/zircote/rlm-rs-plugin/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/zircote/rlm-rs-plugin/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/zircote/rlm-rs-plugin/compare/v0.1.0...v1.0.0
 [0.1.0]: https://github.com/zircote/rlm-rs-plugin/releases/tag/v0.1.0
