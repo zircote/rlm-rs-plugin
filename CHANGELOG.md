@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `batch_size` argument to `/rlm-query` command for configurable subcall batching (default 20)
+- `argument-hint` frontmatter to all commands for improved autocomplete display
+
+### Changed
+- Increased default `--top-k` from 10 to 100 for chunk retrieval to improve analysis coverage
+
 ## [1.1.0] - 2025-01-19
 
 ### Added
