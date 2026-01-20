@@ -62,10 +62,10 @@ Load the large document into a buffer with appropriate chunking:
 rlm-rs load <file_path> --name <buffer_name> --chunker semantic
 
 # Fixed chunking (for unstructured text)
-rlm-rs load <file_path> --name <buffer_name> --chunker fixed --chunk-size 200000
+rlm-rs load <file_path> --name <buffer_name> --chunker fixed --chunk-size 50000
 
 # With overlap for continuity
-rlm-rs load <file_path> --name <buffer_name> --chunker fixed --chunk-size 200000 --overlap 1000
+rlm-rs load <file_path> --name <buffer_name> --chunker fixed --chunk-size 50000 --overlap 1000
 ```
 
 ### Step 3: Scout the Content
@@ -222,7 +222,7 @@ For detailed chunking guidance, refer to the `rlm-chunking` skill.
 rlm-rs init
 
 # 2. Load a large log file
-rlm-rs load server.log --name logs --chunker fixed --chunk-size 150000 --overlap 500
+rlm-rs load server.log --name logs --chunker fixed --chunk-size 50000 --overlap 500
 
 # 3. Search for relevant chunks
 rlm-rs --format json search "database connection errors" --buffer logs --top-k 10

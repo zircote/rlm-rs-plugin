@@ -24,11 +24,11 @@ Split content at exact byte boundaries with optional overlap.
 
 **Configuration:**
 ```bash
-rlm-rs load <file> --chunker fixed --chunk-size 200000 --overlap 1000
+rlm-rs load <file> --chunker fixed --chunk-size 50000 --overlap 1000
 ```
 
 **Parameters:**
-- `--chunk-size`: Characters per chunk (default: 200000)
+- `--chunk-size`: Characters per chunk (default: 3000, max: 50000)
 - `--overlap`: Characters shared between adjacent chunks (default: 0)
 
 **Trade-offs:**
@@ -47,7 +47,7 @@ Split at natural boundaries (headings, paragraph breaks, code blocks).
 
 **Configuration:**
 ```bash
-rlm-rs load <file> --chunker semantic --chunk-size 200000
+rlm-rs load <file> --chunker semantic --chunk-size 50000
 ```
 
 **Behavior:**
@@ -82,26 +82,25 @@ rlm-rs load <file> --chunker parallel --chunk-size 100000
 
 | Content Type | Strategy | Chunk Size | Overlap |
 |--------------|----------|------------|---------|
-| Markdown docs | semantic | 200000 | 0 |
-| Source code | semantic | 150000 | 0 |
-| JSON/XML | semantic | 200000 | 0 |
-| Plain text | fixed | 200000 | 500 |
-| Log files | fixed | 150000 | 1000 |
-| Mixed content | semantic | 200000 | 0 |
-| Very large files | parallel | 100000 | 0 |
+| Markdown docs | semantic | 50000 | 0 |
+| Source code | semantic | 50000 | 0 |
+| JSON/XML | semantic | 50000 | 0 |
+| Plain text | fixed | 50000 | 500 |
+| Log files | fixed | 50000 | 1000 |
+| Mixed content | semantic | 50000 | 0 |
+| Very large files | parallel | 50000 | 0 |
 
 ## Chunk Size Guidelines
 
 ### Context Window Considerations
 
-The 200K default respects model context limits:
-- Haiku context: ~200K tokens
-- Safety margin needed for: prompt, instructions, output
-- Effective usable content: ~180K characters
+The default chunk size of 3000 characters (~750 tokens) is optimized for semantic search quality. Larger chunks (up to 50000 max) can be specified for fewer total chunks:
+- Default: 3000 chars (~750 tokens) - best for semantic search
+- Maximum: 50000 chars (~12,500 tokens) - for fewer chunks
 
 ### Adjusting Size
 
-**Increase chunk size (up to 200000) when:**
+**Increase chunk size (up to 50000) when:**
 - Content has many small sections
 - Need fewer total chunks
 - Sections are tightly interrelated
@@ -144,7 +143,7 @@ rlm-rs peek <buffer_name> --start 0 --end 3000
 
 ### Log Analysis
 ```bash
-rlm-rs load server.log --name logs --chunker fixed --chunk-size 150000 --overlap 500
+rlm-rs load server.log --name logs --chunker fixed --chunk-size 50000 --overlap 500
 ```
 
 ### Documentation Processing
@@ -156,12 +155,12 @@ rlm-rs load docs.md --name docs --chunker semantic
 ```bash
 # Concatenate multiple files first, then load
 cat src/*.rs > combined.rs
-rlm-rs load combined.rs --name code --chunker semantic --chunk-size 150000
+rlm-rs load combined.rs --name code --chunker semantic --chunk-size 50000
 ```
 
 ### Large Dataset
 ```bash
-rlm-rs load dataset.jsonl --name data --chunker parallel --chunk-size 100000
+rlm-rs load dataset.jsonl --name data --chunker parallel --chunk-size 50000
 ```
 
 ## Semantic Search Considerations
