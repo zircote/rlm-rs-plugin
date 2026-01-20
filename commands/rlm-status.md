@@ -33,6 +33,7 @@ rlm-rs list
 - Total chunk count
 - Schema version
 - List of all buffers with sizes and chunk counts
+- Embedding status (use `rlm-rs chunk status` for details)
 
 ## JSON Output
 

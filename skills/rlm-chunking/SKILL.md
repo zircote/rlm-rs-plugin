@@ -164,6 +164,14 @@ rlm-rs load combined.rs --name code --chunker semantic --chunk-size 150000
 rlm-rs load dataset.jsonl --name data --chunker parallel --chunk-size 100000
 ```
 
+## Semantic Search Considerations
+
+Chunking strategy affects search quality:
+
+- **Semantic chunking** works best with semantic search because chunks align with conceptual boundaries
+- **Fixed chunking with overlap** helps ensure search queries match content that might span chunk boundaries
+- Embeddings are generated automatically on first search - no manual step required
+
 ## Troubleshooting
 
 **Chunks too small:** Increase `--chunk-size` or switch to semantic chunking.
@@ -173,3 +181,5 @@ rlm-rs load dataset.jsonl --name data --chunker parallel --chunk-size 100000
 **Processing too slow:** Use parallel chunking for files > 5MB.
 
 **Sub-LLM truncating responses:** Decrease chunk size to allow more output space.
+
+**Search missing relevant content:** Try increasing overlap or switching to semantic chunking.

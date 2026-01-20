@@ -16,7 +16,8 @@ A Claude Code plugin that integrates the **rlm-rs** Rust CLI for processing docu
 This plugin enables Claude Code to:
 - Process documents up to 100x larger than the context window
 - Use multiple chunking strategies (fixed, semantic, parallel)
-- Persist state in SQLite for reliable buffer management
+- **Hybrid semantic + BM25 search** to find relevant chunks efficiently
+- Pass-by-reference chunk retrieval (no file I/O overhead)
 - Delegate chunk-level analysis to efficient sub-LLM calls
 - Synthesize coherent answers from distributed chunk analyses
 
@@ -79,8 +80,8 @@ Run `/help` in Claude Code - you should see `rlm-rs:rlm-init`, `rlm-rs:rlm-load`
 
 ### Agents
 
-- **rlm-subcall**: Haiku-based agent for efficient chunk analysis
-- **rlm-synthesizer**: Sonnet-based agent for aggregating results
+- **rlm-subcall**: Haiku-based agent for efficient chunk analysis (uses pass-by-reference with chunk IDs)
+- **rlm-synthesizer**: Sonnet-based agent for aggregating JSON findings into coherent responses
 
 ## Usage
 
@@ -93,13 +94,19 @@ Run `/help` in Claude Code - you should see `rlm-rs:rlm-init`, `rlm-rs:rlm-load`
 
 2. Load a large file:
    ```
-   /rlm-load path/to/large-document.txt --chunker semantic
+   /rlm-load file=path/to/large-document.txt chunker=semantic
    ```
 
-3. Query the content:
+3. Query the content (uses hybrid semantic + BM25 search):
    ```
-   /rlm-query "What are the main themes discussed?"
+   /rlm-query query="What are the main themes discussed?"
    ```
+
+The query command automatically:
+- Searches for relevant chunks using hybrid search
+- Generates embeddings on first search (cached for future queries)
+- Analyzes only the most relevant chunks
+- Synthesizes a coherent answer
 
 ### Using the RLM Skill
 

@@ -6,71 +6,45 @@ arguments:
     description: The question or analysis task to perform
     required: true
   - name: buffer
-    description: Specific buffer to query (defaults to all)
+    description: Specific buffer to query (defaults to first available)
+    required: false
+  - name: top_k
+    description: Maximum number of chunks to analyze (default 10)
     required: false
 ---
 
 # Query RLM Content
 
-Execute a full RLM workflow query against loaded buffers. This orchestrates chunk analysis via sub-LLM calls and synthesizes results.
+Run hybrid semantic + BM25 search to find relevant chunks.
 
-## Workflow
-
-This command triggers the full RLM workflow:
-
-1. **Identify target buffer(s)** - Use specified buffer or all loaded buffers
-2. **Write chunks to files** - Materialize chunks for subagent processing
-3. **Parallel chunk analysis** - Invoke `rlm-subcall` agent for each chunk
-4. **Result synthesis** - Use `rlm-synthesizer` agent to aggregate findings
-5. **Present answer** - Return coherent response to user
-
-## Execution Steps
-
-### Step 1: Prepare Chunks
+## Execution
 
 ```bash
-# Store query for subagents
-rlm-rs var query "{{query}}"
-
 # Determine buffer
 {{#if buffer}}
 BUFFER="{{buffer}}"
 {{else}}
-BUFFER=$(rlm-rs --format json list | jq -r '.[0].name')
+BUFFER=$(rlm-rs --format json list | jq -r '.[0].name // .[0].id')
 {{/if}}
 
-# Write chunks to files
-rlm-rs write-chunks "$BUFFER" --out-dir .rlm/chunks --prefix chunk
+# Search for relevant chunks
+rlm-rs --format json search "{{query}}" --buffer "$BUFFER" --top-k {{#if top_k}}{{top_k}}{{else}}10{{/if}}
 ```
 
-### Step 2: Process Each Chunk
+## Next Steps
 
-For each chunk file in `.rlm/chunks/chunk_*.txt`:
-- Invoke the `rlm-subcall` agent with the query and chunk path
-- Collect JSON results
+After search returns chunk IDs, batch and invoke subagents:
 
-### Step 3: Synthesize Results
+1. **Batch** chunk IDs into groups of 5
+2. **Invoke** `rlm-subcall` for each batch - pass ONLY `query` and `chunk_ids` arguments:
+   ```
+   Task subagent_type="rlm-rs:rlm-subcall" prompt="query='{{query}}' chunk_ids='<batch>'"
+   ```
+3. **Collect** JSON findings from all batches
+4. **Invoke** `rlm-synthesizer` with combined findings:
+   ```
+   Task subagent_type="rlm-rs:rlm-synthesizer" prompt="query='{{query}}' findings='[...]'"
+   ```
+5. **Present** synthesized answer to user
 
-- Store all chunk results in a buffer
-- Invoke `rlm-synthesizer` agent to aggregate findings
-- Present final answer
-
-## Example Usage
-
-```bash
-# Query all loaded content
-/rlm-query query="What are the main error patterns in these logs?"
-
-# Query specific buffer
-/rlm-query query="Summarize the key architectural decisions" buffer=docs
-
-# Complex analysis
-/rlm-query query="Find all API endpoints and their authentication requirements"
-```
-
-## Notes
-
-- Query execution time depends on number of chunks
-- Chunks are processed sequentially via Task tool invocations to the `rlm-subcall` agent
-- Results cached in `.rlm/chunks/` until next query
-- Template variables (`{{query}}`, `{{buffer}}`) are substituted at execution time by Claude Code
+**IMPORTANT**: Do NOT write narrative prompts. Do NOT include buffer ID. The agents know what to do - just pass the arguments.

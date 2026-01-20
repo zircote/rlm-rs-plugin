@@ -49,6 +49,10 @@ rlm-rs list
 - **fixed**: Split at exact character boundaries
 - **parallel**: Multi-threaded fixed chunking for large files
 
+## Embedding
+
+Embeddings for semantic search are generated automatically when you first run a `search` command. No manual embedding step is required.
+
 ## Examples
 
 ```bash

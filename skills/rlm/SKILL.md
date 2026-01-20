@@ -1,7 +1,7 @@
 ---
 name: rlm
 description: This skill should be used when the user asks to "process a large file", "analyze document exceeding context", "use RLM", "recursive language model workflow", "chunk and analyze a file", "handle long context", or needs to work with documents too large to fit in the context window. Orchestrates the full RLM loop using the rlm-rs CLI.
-version: 0.1.0
+version: 1.0.0
 allowed-tools:
   - Read
   - Write
@@ -86,50 +86,92 @@ Search for relevant sections:
 rlm-rs grep <buffer_name> "<pattern>" --max-matches 20 --window 150
 ```
 
-### Step 4: Write Chunks to Files
+### Step 4: Search for Relevant Chunks
 
-Materialize chunks as files for subagent processing:
+Use hybrid semantic + BM25 search to find chunks matching your query:
 
 ```bash
-rlm-rs write-chunks <buffer_name> --out-dir .rlm/chunks --prefix chunk
+# Hybrid search (semantic + BM25 with rank fusion)
+rlm-rs search "your query" --buffer <buffer_name> --top-k 10
+
+# JSON output for programmatic use
+rlm-rs --format json search "your query" --top-k 10
 ```
 
-This creates files like `.rlm/chunks/chunk_0000.txt`, `.rlm/chunks/chunk_0001.txt`, etc.
+Output includes chunk IDs with relevance scores:
+```json
+{
+  "count": 2,
+  "mode": "hybrid",
+  "query": "your query",
+  "results": [
+    {"chunk_id": 42, "score": 0.0328, "semantic_score": 0.0499, "bm25_score": 1.6e-6},
+    {"chunk_id": 17, "score": 0.0323, "semantic_score": 0.0457, "bm25_score": 1.2e-6}
+  ]
+}
+```
 
-### Step 5: Subcall Loop
+Extract chunk IDs with jq: `jq -r '.results[].chunk_id'`
 
-For each chunk file, delegate analysis to the `rlm-subcall` agent:
+### Step 5: Retrieve Chunks by ID
 
-1. List chunk files:
-   ```bash
-   ls .rlm/chunks/chunk_*.txt
-   ```
+Get specific chunk content via pass-by-reference:
 
-2. For each chunk, invoke the Task tool with `rlm-subcall` agent:
-   - Provide the user's query
-   - Provide the chunk file path
-   - Request structured JSON output
+```bash
+# Get chunk content
+rlm-rs chunk get 42
 
-3. Collect results from each subcall into an intermediate buffer:
-   ```bash
-   rlm-rs add-buffer chunk_results "$(cat <<'EOF'
-   <paste JSON results here>
-   EOF
-   )"
-   ```
+# With metadata
+rlm-rs --format json chunk get 42 --metadata
+```
 
-### Step 6: Synthesis
+### Step 6: Subcall Loop (Batched, Parallel)
+
+Only process chunks returned by search. Batch chunk IDs to reduce agent calls:
+
+1. Search returns chunk IDs with relevance scores
+2. Group chunk IDs into batches of 5 (e.g., [1,2,3,4,5], [6,7,8,9,10], [11,12])
+3. Invoke `rlm-subcall` agent once per batch using **only** the two required arguments
+4. Launch batches in parallel via multiple Task calls in one response
+5. Agent handles retrieval internally via `rlm-rs chunk get <id>` (NO buffer ID needed)
+6. Collect structured JSON findings from all batches
+
+**CORRECT Task invocation** - pass ONLY `query` and `chunk_ids` arguments:
+```
+Task subagent_type="rlm-rs:rlm-subcall" prompt="query='What errors occurred?' chunk_ids='3,7,12,15,22'"
+Task subagent_type="rlm-rs:rlm-subcall" prompt="query='What errors occurred?' chunk_ids='28,31,45'"
+```
+
+**CRITICAL - DO NOT**:
+- Write narrative prompts - the agent already knows what to do
+- Include buffer ID or buffer NAME anywhere in the prompt
+- Mention the buffer at all - chunk IDs are globally unique across all buffers
+
+WRONG (causes exit code 2):
+```
+prompt="Analyze chunks from buffer 1..."  # NO - has buffer ID
+prompt="Analyze chunks from buffer 'myfile.txt'..."  # NO - has buffer name
+prompt="Use rlm-rs chunk 1 <id>..."  # NO - buffer ID in command
+prompt="Use rlm-rs chunk get <id> --buffer x..."  # NO - --buffer flag doesn't exist
+```
+
+RIGHT:
+```
+prompt="query='the user question' chunk_ids='5,105,2,3,74'"  # YES - just args!
+```
+
+### Step 7: Synthesis
 
 Once all chunks are processed:
 
-1. Export collected results:
-   ```bash
-   rlm-rs export-buffers --output .rlm/all_results.json --pretty
-   ```
+1. Collect all JSON findings from subcall agents
+2. Pass findings directly to `rlm-synthesizer` agent (no intermediate files)
+3. Present the final synthesized response to the user
 
-2. Use the `rlm-synthesizer` agent to aggregate findings into a coherent answer.
-
-3. Present the final synthesized response to the user.
+Example Task tool invocation:
+```
+Task agent=rlm-synthesizer query="What errors occurred?" findings='[...]' chunk_ids="42,17,23"
+```
 
 ## Guardrails
 
@@ -137,6 +179,7 @@ Once all chunks are processed:
 - **Keep subagent outputs compact** - Request JSON format with short evidence fields
 - **Orchestration stays in main conversation** - Subagents cannot spawn other subagents
 - **State persists in SQLite** - All buffers survive across sessions via `.rlm/rlm-state.db`
+- **No file I/O for chunk passing** - Use pass-by-reference with chunk IDs
 
 ## Chunking Strategy Selection
 
@@ -161,7 +204,12 @@ For detailed chunking guidance, refer to the `rlm-chunking` skill.
 | `show` | Show buffer details |
 | `peek` | View buffer content slice |
 | `grep` | Search with regex |
-| `write-chunks` | Export chunks to files |
+| `search` | Hybrid semantic + BM25 search |
+| `chunk get` | Retrieve chunk by ID |
+| `chunk list` | List buffer chunks |
+| `chunk embed` | Generate embeddings |
+| `chunk status` | Show embedding status |
+| `write-chunks` | Export chunks to files (legacy) |
 | `add-buffer` | Store intermediate results |
 | `export-buffers` | Export all buffers |
 | `var` | Get/set context variables |
@@ -176,14 +224,12 @@ rlm-rs init
 # 2. Load a large log file
 rlm-rs load server.log --name logs --chunker fixed --chunk-size 150000 --overlap 500
 
-# 3. Scout for errors
-rlm-rs grep logs "ERROR|FATAL" --max-matches 50
+# 3. Search for relevant chunks
+rlm-rs --format json search "database connection errors" --buffer logs --top-k 10
 
-# 4. Write chunks
-rlm-rs write-chunks logs --out-dir .rlm/chunks
-
-# 5. Process each chunk with rlm-subcall agent
-# 6. Synthesize with rlm-synthesizer agent
+# 4. For each relevant chunk ID, invoke rlm-subcall agent
+# 5. Collect JSON findings
+# 6. Pass findings to rlm-synthesizer agent
 # 7. Present final answer
 ```
 

@@ -38,8 +38,8 @@ The RLM pattern enables processing of documents that far exceed LLM context wind
 │  │ • Fixed     │    │ • Load      │    │ .rlm/rlm-state.db   │ │
 │  │ • Semantic  │    │ • Peek      │    │                     │ │
 │  │ • Parallel  │    │ • Grep      │    │ • Buffers           │ │
-│  │             │    │ • Export    │    │ • Chunks            │ │
-│  │             │    │             │    │ • Variables         │ │
+│  │             │    │ • Search    │    │ • Chunks            │ │
+│  │             │    │ • Chunk Get │    │ • Embeddings        │ │
 │  └─────────────┘    └─────────────┘    └─────────────────────┘ │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
@@ -72,21 +72,43 @@ The RLM pattern enables processing of documents that far exceed LLM context wind
 4. CLI: Load & Chunk Document
    │  rlm-rs load <file> --chunker <strategy>
    ▼
-5. CLI: Write Chunks to Files
-   │  rlm-rs write-chunks <buffer> --out-dir .rlm/chunks
+5. CLI: Search for Relevant Chunks
+   │  rlm-rs search "<query>" --buffer <name> --top-k 10
+   │  (Embeddings generated automatically on first search)
    ▼
-6. Subcall Loop (parallel or sequential)
-   │  For each chunk:
-   │    Task tool → rlm-subcall agent → JSON findings
+6. Subcall Loop (targeted, parallel)
+   │  For each relevant chunk ID from search:
+   │    Task tool → rlm-subcall agent (chunk_id) → JSON findings
+   │    Agent retrieves content via: rlm-rs chunk get <id>
    ▼
-7. Collect Results
-   │  rlm-rs add-buffer results <json>
+7. Synthesis
+   │  Task tool → rlm-synthesizer agent (JSON findings) → Final answer
    ▼
-8. Synthesis
-   │  Task tool → rlm-synthesizer agent → Final answer
-   ▼
-9. Present to User
+8. Present to User
 ```
+
+### Pass-by-Reference Pattern
+
+The 1.0.0 workflow uses pass-by-reference for chunk content:
+
+```
+┌─────────────┐     chunk_id      ┌─────────────┐
+│   Search    │ ───────────────→  │  Subcall    │
+│   Results   │                   │   Agent     │
+└─────────────┘                   └──────┬──────┘
+                                         │
+                                         │ rlm-rs chunk get <id>
+                                         ▼
+                                  ┌─────────────┐
+                                  │   SQLite    │
+                                  │   Storage   │
+                                  └─────────────┘
+```
+
+Benefits:
+- **No file I/O**: Chunks stay in SQLite, not written to disk
+- **Efficient**: Only relevant chunks retrieved (via search)
+- **Atomic**: Chunk retrieval by ID is guaranteed consistent
 
 ### State Persistence
 
@@ -102,6 +124,17 @@ CREATE TABLE buffers (
     chunk_size INTEGER,
     overlap INTEGER,
     created_at TIMESTAMP
+);
+
+-- Chunks table (with embeddings)
+CREATE TABLE chunks (
+    id INTEGER PRIMARY KEY,
+    buffer_id INTEGER REFERENCES buffers(id),
+    chunk_index INTEGER,
+    start_offset INTEGER,
+    end_offset INTEGER,
+    content TEXT,
+    embedding BLOB  -- Vector embedding for semantic search
 );
 
 -- Variables table (for context passing)
@@ -131,10 +164,10 @@ CREATE TABLE variables (
 1. Verify rlm-rs installation
 2. Initialize database
 3. Load document with appropriate chunking
-4. Scout content structure
-5. Write chunks to files
-6. Invoke subcall agents for each chunk
-7. Collect and synthesize results
+4. Scout content structure (peek, grep)
+5. Search for relevant chunks (hybrid semantic + BM25)
+6. Invoke subcall agents for each relevant chunk (by ID)
+7. Synthesize results from JSON findings
 
 #### rlm-chunking (Strategy Guide)
 
@@ -162,14 +195,16 @@ CREATE TABLE variables (
 
 **Model**: Haiku (fast, cost-effective)
 **Color**: Cyan
-**Tools**: Read, Grep, Bash
+**Tools**: Bash, Grep
 
-**Input**: Query + chunk file path
+**Input**: Query + chunk ID (pass-by-reference)
 **Output**: Structured JSON with findings
+
+The agent retrieves chunk content via `rlm-rs chunk get <id>`:
 
 ```json
 {
-  "chunk_id": "chunk_0001",
+  "chunk_id": 42,
   "relevant": true,
   "findings": [...],
   "metadata": {...}
@@ -180,14 +215,16 @@ CREATE TABLE variables (
 
 **Model**: Sonnet (more capable for synthesis)
 **Color**: Green
-**Tools**: Read, Bash
+**Tools**: Bash, Read
 
-**Input**: Original query + all chunk findings
+**Input**: Original query + JSON findings (inline or buffer name)
 **Output**: Coherent markdown response with:
 - Executive summary
 - Key findings
 - Analysis
 - Recommendations
+
+The synthesizer accepts findings directly as JSON (preferred) or as a buffer name to retrieve.
 
 ## Chunking Strategies
 

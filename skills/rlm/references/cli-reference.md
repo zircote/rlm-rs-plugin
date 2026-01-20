@@ -187,7 +187,7 @@ Options:
 
 ### write-chunks
 
-Write buffer chunks to individual files.
+Write buffer chunks to individual files (legacy file-based workflow).
 
 ```bash
 rlm-rs write-chunks <BUFFER> [OPTIONS]
@@ -208,6 +208,138 @@ rlm-rs write-chunks logs --out-dir .rlm/chunks --prefix log_chunk
 ```
 
 **Output files:** `chunk_0000.txt`, `chunk_0001.txt`, etc.
+
+**Note:** For the recommended pass-by-reference workflow, use `search` + `chunk get` instead.
+
+### search
+
+Search chunks using hybrid semantic + BM25 search with Reciprocal Rank Fusion.
+
+```bash
+rlm-rs search <QUERY> [OPTIONS]
+
+Arguments:
+  <QUERY>    Search query text
+
+Options:
+  -k, --top-k <N>          Maximum results [default: 10]
+  -t, --threshold <F>      Minimum similarity threshold 0.0-1.0 [default: 0.3]
+  -m, --mode <MODE>        Search mode: hybrid, semantic, bm25 [default: hybrid]
+      --rrf-k <N>          RRF k parameter for rank fusion [default: 60]
+  -b, --buffer <BUFFER>    Filter by buffer ID or name
+```
+
+**Examples:**
+```bash
+# Hybrid search (combines semantic + BM25)
+rlm-rs search "authentication error handling"
+
+# Semantic-only search
+rlm-rs search "database connection patterns" --mode semantic
+
+# Filter to specific buffer
+rlm-rs search "API endpoints" --buffer docs --top-k 5
+
+# JSON output for programmatic use
+rlm-rs --format json search "your query" --top-k 10
+```
+
+**Output (JSON format):**
+```json
+{
+  "count": 2,
+  "mode": "hybrid",
+  "query": "your query",
+  "results": [
+    {"chunk_id": 42, "score": 0.0328, "semantic_score": 0.0499, "bm25_score": 1.6e-6},
+    {"chunk_id": 17, "score": 0.0323, "semantic_score": 0.0457, "bm25_score": 1.2e-6}
+  ]
+}
+```
+
+**Extract chunk IDs:** `jq -r '.results[].chunk_id'`
+
+### chunk
+
+Chunk operations for pass-by-reference retrieval.
+
+#### chunk get
+
+Get a chunk by ID (primary pass-by-reference mechanism).
+
+```bash
+rlm-rs chunk get <ID> [OPTIONS]
+
+Arguments:
+  <ID>    Chunk ID
+
+Options:
+  -m, --metadata    Include metadata in output
+```
+
+**Examples:**
+```bash
+rlm-rs chunk get 42                    # Get chunk content
+rlm-rs chunk get 42 --metadata         # Include metadata
+rlm-rs --format json chunk get 42      # JSON output
+```
+
+#### chunk list
+
+List chunks for a buffer.
+
+```bash
+rlm-rs chunk list <BUFFER> [OPTIONS]
+
+Arguments:
+  <BUFFER>    Buffer ID or name
+
+Options:
+  -p, --preview                    Show content preview
+      --preview-len <N>            Preview length [default: 100]
+```
+
+**Examples:**
+```bash
+rlm-rs chunk list docs              # List all chunks
+rlm-rs chunk list docs --preview    # With content previews
+```
+
+#### chunk embed
+
+Generate embeddings for buffer chunks (enables semantic search).
+
+```bash
+rlm-rs chunk embed <BUFFER> [OPTIONS]
+
+Arguments:
+  <BUFFER>    Buffer ID or name
+
+Options:
+  -f, --force    Re-embed even if already embedded
+```
+
+**Examples:**
+```bash
+rlm-rs chunk embed docs              # Embed chunks
+rlm-rs chunk embed docs --force      # Re-embed all
+```
+
+**Note:** Embedding is handled automatically by the `search` command when needed.
+
+#### chunk status
+
+Show embedding status for all buffers.
+
+```bash
+rlm-rs chunk status
+```
+
+**Output includes:**
+- Buffer name and ID
+- Total chunks
+- Embedded chunks count
+- Embedding coverage percentage
 
 ### add-buffer
 

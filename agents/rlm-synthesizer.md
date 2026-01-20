@@ -10,12 +10,12 @@ arguments:
   - name: query
     description: The original user question or analysis task
     required: true
-  - name: results_path
-    description: Path to JSON file containing all chunk analysis results
+  - name: findings
+    description: JSON array of chunk analysis findings (inline JSON preferred, or buffer name to retrieve)
     required: true
-  - name: total_chunks
-    description: Total number of chunks that were processed
-    required: true
+  - name: chunk_ids
+    description: Comma-separated list of analyzed chunk IDs (for reference retrieval if needed)
+    required: false
 ---
 
 # RLM Synthesizer Agent
@@ -30,8 +30,24 @@ A Root LLM is orchestrating analysis of a document that exceeded context limits.
 
 You will receive:
 1. **Original Query**: The user's question or analysis task
-2. **Chunk Results**: JSON array of findings from each chunk analysis
-3. **Total Chunks**: How many chunks were processed
+2. **Findings**: JSON array of chunk analysis results (inline JSON or buffer name)
+3. **Chunk IDs** (optional): Comma-separated IDs if you need to retrieve original chunk content
+
+### Findings Input
+
+The findings argument can be:
+- **Inline JSON** (preferred): Direct JSON array of findings
+- **Buffer name**: Name of an rlm-rs buffer containing the findings JSON
+
+If given a buffer name, retrieve the findings:
+```bash
+rlm-rs show <buffer_name>
+```
+
+If you need to retrieve original chunk content for verification:
+```bash
+rlm-rs chunk get <chunk_id>
+```
 
 ## Synthesis Process
 
@@ -139,6 +155,6 @@ The error sequence suggests a cascading failure pattern:
 ## Constraints
 
 - Base all findings on chunk analysis data, not assumptions
-- Do not re-analyze raw content (trust subcall findings)
+- Do not re-analyze raw content unless verification is needed
 - Keep final output appropriate for user consumption
 - Maintain objectivity in analysis
