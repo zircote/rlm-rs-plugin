@@ -98,20 +98,23 @@ rlm-rs search "your query" --buffer <buffer_name> --top-k 100
 rlm-rs --format json search "your query" --top-k 100
 ```
 
-Output includes chunk IDs with relevance scores:
+Output includes chunk IDs with relevance scores and document position (index):
 ```json
 {
   "count": 2,
   "mode": "hybrid",
   "query": "your query",
   "results": [
-    {"chunk_id": 42, "score": 0.0328, "semantic_score": 0.0499, "bm25_score": 1.6e-6},
-    {"chunk_id": 17, "score": 0.0323, "semantic_score": 0.0457, "bm25_score": 1.2e-6}
+    {"chunk_id": 42, "buffer_id": 1, "index": 5, "score": 0.0328, "semantic_score": 0.0499, "bm25_score": 1.6e-6},
+    {"chunk_id": 17, "buffer_id": 1, "index": 2, "score": 0.0323, "semantic_score": 0.0457, "bm25_score": 1.2e-6}
   ]
 }
 ```
 
-Extract chunk IDs with jq: `jq -r '.results[].chunk_id'`
+- `index`: Sequential position within the document (0-based) - use for temporal ordering
+- `buffer_id`: Which buffer/document this chunk belongs to
+
+Extract chunk IDs sorted by document position: `jq -r '.results | sort_by(.index) | .[].chunk_id'`
 
 ### Step 5: Retrieve Chunks by ID
 
@@ -129,14 +132,17 @@ rlm-rs --format json chunk get 42 --metadata
 
 Only process chunks returned by search. Batch chunk IDs to reduce agent calls:
 
-1. Search returns chunk IDs with relevance scores
-2. Group chunk IDs into batches (default 20, configurable via `batch_size` argument)
-3. Invoke `rlm-subcall` agent once per batch using **only** the two required arguments
-4. Launch batches in parallel via multiple Task calls in one response
-5. Agent handles retrieval internally via `rlm-rs chunk get <id>` (NO buffer ID needed)
-6. Collect structured JSON findings from all batches
+1. Search returns chunk IDs with relevance scores and document indices
+2. **Sort all chunk IDs by `index` (document position) to preserve temporal context**
+3. Group sorted chunk IDs into batches (default 10, configurable via `batch_size` argument)
+4. Invoke `rlm-subcall` agent once per batch using **only** the two required arguments
+5. Launch batches in parallel via multiple Task calls in one response
+6. Agent handles retrieval internally via `rlm-rs chunk get <id>` (NO buffer ID needed)
+7. Collect structured JSON findings from all batches
 
-**CORRECT Task invocation** - pass ONLY `query` and `chunk_ids` arguments:
+**IMPORTANT**: Sort chunks by `index` before batching to preserve document flow. Each subagent should receive chunks in document order (e.g., `3,7,12,15,22` not `22,3,15,7,12`). This ensures temporal context is maintained - definitions appear before usages, causes before effects.
+
+**CORRECT Task invocation** - pass ONLY `query` and `chunk_ids` arguments (sorted by index):
 ```
 Task subagent_type="rlm-rs:rlm-subcall" prompt="query='What errors occurred?' chunk_ids='3,7,12,15,22'"
 Task subagent_type="rlm-rs:rlm-subcall" prompt="query='What errors occurred?' chunk_ids='28,31,45'"

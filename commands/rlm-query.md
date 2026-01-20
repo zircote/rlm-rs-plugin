@@ -1,7 +1,7 @@
 ---
 name: rlm-query
 description: Run a query against loaded RLM content using the full RLM workflow
-argument-hint: query="<question>" [buffer=<name>] [top_k=100] [batch_size=20]
+argument-hint: query="<question>" [buffer=<name>] [top_k=100] [batch_size=10]
 arguments:
   - name: query
     description: The question or analysis task to perform
@@ -13,7 +13,7 @@ arguments:
     description: Maximum number of chunks to retrieve (default 100)
     required: false
   - name: batch_size
-    description: Number of chunks per subcall agent batch (default 20)
+    description: Number of chunks per subcall agent batch (default 10)
     required: false
 ---
 
@@ -31,15 +31,15 @@ BUFFER="{{buffer}}"
 BUFFER=$(rlm-rs --format json list | jq -r '.[0].name // .[0].id')
 {{/if}}
 
-# Search for relevant chunks
-rlm-rs --format json search "{{query}}" --buffer "$BUFFER" --top-k {{#if top_k}}{{top_k}}{{else}}100{{/if}}
+# Search for relevant chunks (sorted by document position)
+rlm-rs --format json search "{{query}}" --buffer "$BUFFER" --top-k {{#if top_k}}{{top_k}}{{else}}100{{/if}} | jq '{count, mode, query, results: (.results | sort_by(.index))}'
 ```
 
 ## Next Steps
 
-After search returns chunk IDs, batch and invoke subagents:
+After search returns chunk IDs (already sorted by document position), batch and invoke subagents:
 
-1. **Batch** chunk IDs into groups of {{#if batch_size}}{{batch_size}}{{else}}20{{/if}}
+1. **Batch** chunk IDs into groups of {{#if batch_size}}{{batch_size}}{{else}}10{{/if}} (maintain order)
 2. **Invoke** `rlm-subcall` for each batch - pass ONLY `query` and `chunk_ids` arguments:
    ```
    Task subagent_type="rlm-rs:rlm-subcall" prompt="query='{{query}}' chunk_ids='<batch>'"

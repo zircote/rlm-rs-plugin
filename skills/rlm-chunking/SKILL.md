@@ -28,7 +28,7 @@ rlm-rs load <file> --chunker fixed --chunk-size 50000 --overlap 1000
 ```
 
 **Parameters:**
-- `--chunk-size`: Characters per chunk (default: 3000, max: 50000)
+- `--chunk-size`: Characters per chunk (default: 6000, max: 50000)
 - `--overlap`: Characters shared between adjacent chunks (default: 0)
 
 **Trade-offs:**
@@ -94,8 +94,8 @@ rlm-rs load <file> --chunker parallel --chunk-size 100000
 
 ### Context Window Considerations
 
-The default chunk size of 3000 characters (~750 tokens) is optimized for semantic search quality. Larger chunks (up to 50000 max) can be specified for fewer total chunks:
-- Default: 3000 chars (~750 tokens) - best for semantic search
+The default chunk size of 6000 characters (~1500 tokens) is optimized for semantic search quality. Larger chunks (up to 50000 max) can be specified for fewer total chunks:
+- Default: 6000 chars (~1500 tokens) - best for semantic search
 - Maximum: 50000 chars (~12,500 tokens) - for fewer chunks
 
 ### Adjusting Size

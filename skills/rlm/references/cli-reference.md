@@ -58,7 +58,7 @@ Arguments:
 Options:
   -n, --name <NAME>           Buffer name (defaults to filename)
   -c, --chunker <CHUNKER>     Chunking strategy: fixed, semantic, parallel [default: semantic]
-      --chunk-size <SIZE>     Chunk size in characters [default: 200000]
+      --chunk-size <SIZE>     Chunk size in characters [default: 6000]
       --overlap <OVERLAP>     Overlap between chunks [default: 0]
 ```
 
@@ -181,7 +181,7 @@ Arguments:
   <BUFFER>    Buffer ID or name
 
 Options:
-      --chunk-size <SIZE>    Chunk size [default: 200000]
+      --chunk-size <SIZE>    Chunk size [default: 6000]
       --overlap <OVERLAP>    Overlap size [default: 0]
 ```
 
@@ -197,7 +197,7 @@ Arguments:
 
 Options:
   -o, --out-dir <DIR>        Output directory [default: .rlm/chunks]
-      --chunk-size <SIZE>    Chunk size [default: 200000]
+      --chunk-size <SIZE>    Chunk size [default: 6000]
       --overlap <OVERLAP>    Overlap size [default: 0]
       --prefix <PREFIX>      Filename prefix [default: chunk]
 ```

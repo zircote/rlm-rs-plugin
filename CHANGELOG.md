@@ -8,11 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- `batch_size` argument to `/rlm-query` command for configurable subcall batching (default 20)
+- `batch_size` argument to `/rlm-query` command for configurable subcall batching (default 10)
 - `argument-hint` frontmatter to all commands for improved autocomplete display
+- Document `index` field in search results for temporal/document ordering of chunks
 
 ### Changed
 - Increased default `--top-k` from 10 to 100 for chunk retrieval to improve analysis coverage
+- Updated default chunk size to 6000 characters (~1500 tokens) for better semantic search balance
+- Reduced default batch size from 20 to 10 chunks per subcall agent
 
 ## [1.1.0] - 2025-01-19
 
