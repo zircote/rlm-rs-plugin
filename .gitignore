@@ -6,3 +6,7 @@
 
 # OS files
 .DS_Store
+
+# Test/temp files
+EX-*.txt
+PLAN-*.md
