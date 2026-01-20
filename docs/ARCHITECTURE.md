@@ -187,7 +187,7 @@ CREATE TABLE variables (
 | `/rlm-init` | `--force` (optional) | Initialize SQLite database |
 | `/rlm-load` | `file`, `name`, `chunker`, `chunk-size`, `overlap` | Load file into buffer |
 | `/rlm-status` | none | Show current state |
-| `/rlm-query` | `query`, `buffer` | Run analysis query |
+| `/rlm-query` | `query`, `buffer`, `top_k`, `batch_size` | Run analysis query |
 
 ### Agents
 

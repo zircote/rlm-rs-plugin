@@ -121,7 +121,7 @@ Create `.claude/rlm-rs.local.md` in your project for custom settings:
 
 ```yaml
 ---
-chunk_size: 200000
+chunk_size: 6000
 overlap: 0
 default_chunker: semantic
 ---

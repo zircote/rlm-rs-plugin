@@ -95,6 +95,7 @@ Commands are explicit slash commands invoked by users.
 ---
 name: command-name
 description: Brief description
+argument-hint: arg1=<value> [arg2=<optional>]
 arguments:
   - name: arg1
     description: What this argument does

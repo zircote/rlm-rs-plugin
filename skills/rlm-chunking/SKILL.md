@@ -24,7 +24,7 @@ Split content at exact byte boundaries with optional overlap.
 
 **Configuration:**
 ```bash
-rlm-rs load <file> --chunker fixed --chunk-size 50000 --overlap 1000
+rlm-rs load <file> --chunker fixed --chunk-size 6000 --overlap 1000
 ```
 
 **Parameters:**
@@ -47,7 +47,7 @@ Split at natural boundaries (headings, paragraph breaks, code blocks).
 
 **Configuration:**
 ```bash
-rlm-rs load <file> --chunker semantic --chunk-size 50000
+rlm-rs load <file> --chunker semantic --chunk-size 6000
 ```
 
 **Behavior:**
@@ -82,13 +82,13 @@ rlm-rs load <file> --chunker parallel --chunk-size 100000
 
 | Content Type | Strategy | Chunk Size | Overlap |
 |--------------|----------|------------|---------|
-| Markdown docs | semantic | 50000 | 0 |
-| Source code | semantic | 50000 | 0 |
-| JSON/XML | semantic | 50000 | 0 |
-| Plain text | fixed | 50000 | 500 |
-| Log files | fixed | 50000 | 1000 |
-| Mixed content | semantic | 50000 | 0 |
-| Very large files | parallel | 50000 | 0 |
+| Markdown docs | semantic | 6000 | 0 |
+| Source code | semantic | 6000 | 0 |
+| JSON/XML | semantic | 6000 | 0 |
+| Plain text | fixed | 6000 | 500 |
+| Log files | fixed | 6000 | 1000 |
+| Mixed content | semantic | 6000 | 0 |
+| Very large files | parallel | 6000 | 0 |
 
 ## Chunk Size Guidelines
 
@@ -143,7 +143,7 @@ rlm-rs peek <buffer_name> --start 0 --end 3000
 
 ### Log Analysis
 ```bash
-rlm-rs load server.log --name logs --chunker fixed --chunk-size 50000 --overlap 500
+rlm-rs load server.log --name logs --chunker fixed --chunk-size 6000 --overlap 500
 ```
 
 ### Documentation Processing
@@ -155,12 +155,12 @@ rlm-rs load docs.md --name docs --chunker semantic
 ```bash
 # Concatenate multiple files first, then load
 cat src/*.rs > combined.rs
-rlm-rs load combined.rs --name code --chunker semantic --chunk-size 50000
+rlm-rs load combined.rs --name code --chunker semantic --chunk-size 6000
 ```
 
 ### Large Dataset
 ```bash
-rlm-rs load dataset.jsonl --name data --chunker parallel --chunk-size 50000
+rlm-rs load dataset.jsonl --name data --chunker parallel --chunk-size 6000
 ```
 
 ## Semantic Search Considerations
