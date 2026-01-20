@@ -1,6 +1,7 @@
 ---
 name: rlm-load
 description: Load a file into an RLM buffer with chunking
+argument-hint: file=<path> [name=<buffer>] [chunker=semantic|fixed|parallel] [chunk-size=200000] [overlap=0]
 arguments:
   - name: file
     description: Path to the file to load

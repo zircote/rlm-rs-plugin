@@ -1,6 +1,7 @@
 ---
 name: rlm-status
 description: Show current RLM state including buffers and database info
+argument-hint: (no arguments)
 arguments: []
 ---
 

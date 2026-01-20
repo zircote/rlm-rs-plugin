@@ -1,6 +1,7 @@
 ---
 name: rlm-init
 description: Initialize the RLM database for storing buffers and state
+argument-hint: [force=true]
 arguments:
   - name: force
     description: Force re-initialization (destroys existing data)
