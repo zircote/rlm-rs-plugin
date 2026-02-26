@@ -1,0 +1,25 @@
+# RLM-RS Plugin Documentation
+
+> Recursive Language Model integration for Claude Code
+
+## Overview
+RLM-RS is a Claude Code plugin that integrates the rlm-rs Rust CLI for processing documents that exceed typical context window limits using the Recursive Language Model (RLM) pattern from arXiv:2512.24601.
+
+## Key Features
+- Process documents up to 100x larger than the context window
+- Multiple chunking strategies: fixed, semantic, parallel
+- Hybrid semantic + BM25 search with Reciprocal Rank Fusion
+- Pass-by-reference chunk retrieval via SQLite
+- Distributed chunk analysis with sub-LLM agents
+- Coherent synthesis from distributed findings
+
+## Documentation Structure
+- Getting Started: Installation and basic usage
+- Concepts: Technical overview and architecture
+- Reference: CLI command reference
+- Skills: RLM workflow skill, chunking strategy guide
+
+## Links
+- Repository: https://github.com/zircote/rlm-rs-plugin
+- CLI Repository: https://github.com/zircote/rlm
+- Documentation: https://zircote.github.io/rlm-rs-plugin/

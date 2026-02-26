@@ -1,0 +1,34 @@
+{
+  "pages": [
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "slug": "architecture",
+      "title": "Architecture",
+      "description": "Plugin architecture, component mapping, data flow, and extension points."
+    },
+    {
+      "source": "docs/TECHNICAL-OVERVIEW.md",
+      "slug": "technical-overview",
+      "title": "Technical Overview",
+      "description": "RLM implementation details, hybrid search, chunking strategies, and portability."
+    },
+    {
+      "source": "CONTRIBUTING.md",
+      "slug": "getting-started",
+      "title": "Getting Started",
+      "description": "Development setup, project structure, testing, and contribution guidelines."
+    },
+    {
+      "source": "CHANGELOG.md",
+      "slug": "changelog",
+      "title": "Changelog",
+      "description": "Release history and notable changes."
+    },
+    {
+      "source": "skills/rlm/references/cli-reference.md",
+      "slug": "cli-reference",
+      "title": "CLI Reference",
+      "description": "Complete command reference for the rlm-rs CLI tool."
+    }
+  ]
+}

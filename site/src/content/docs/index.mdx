@@ -1,0 +1,71 @@
+---
+title: RLM-RS Plugin
+description: Recursive Language Model integration for Claude Code — process documents far exceeding context windows.
+template: splash
+hero:
+  title: RLM-RS Plugin
+  tagline: Process documents 100x larger than context windows using the Recursive Language Model pattern.
+  actions:
+    - text: Get Started
+      link: /rlm-rs-plugin/getting-started/
+      icon: right-arrow
+      variant: primary
+    - text: View on GitHub
+      link: https://github.com/zircote/rlm-rs-plugin
+      icon: external
+      variant: minimal
+---
+
+import { CardGrid, Card } from '@astrojs/starlight/components';
+
+## Features
+
+<CardGrid stagger>
+  <Card title="Chunk & Conquer" icon="document">
+    Split large documents using semantic, fixed, or parallel chunking strategies.
+    Each chunk is stored in SQLite and retrieved by ID — no file I/O overhead.
+  </Card>
+
+  <Card title="Hybrid Search" icon="magnifier">
+    Find relevant chunks with BM25 + semantic search, fused via Reciprocal Rank Fusion (RRF).
+    Embeddings generated on-demand and cached for subsequent queries.
+  </Card>
+
+  <Card title="Distributed Analysis" icon="puzzle">
+    Sub-LLM agents analyze individual chunks in parallel. Each agent retrieves
+    content by chunk ID using pass-by-reference — efficient and atomic.
+  </Card>
+
+  <Card title="Coherent Synthesis" icon="rocket">
+    A synthesis agent aggregates findings from all chunks into a coherent,
+    structured response with summaries, key findings, and recommendations.
+  </Card>
+</CardGrid>
+
+## Quick Start
+
+```bash
+# Install the rlm-rs CLI
+cargo install --git https://github.com/zircote/rlm rlm-rs
+
+# Install the plugin
+claude plugin install zircote/rlm-rs-plugin
+```
+
+Then in Claude Code:
+
+```
+/rlm-init
+/rlm-load file=large-document.txt chunker=semantic
+/rlm-query query="What are the main themes?"
+```
+
+## Architecture
+
+| RLM Concept | Implementation |
+|-------------|----------------|
+| Root LLM | Main Claude Code conversation (Opus/Sonnet) |
+| Sub-LLM | `rlm-subcall` agent (Haiku) |
+| External Environment | `rlm-rs` CLI with SQLite storage |
+
+Based on [arXiv:2512.24601](https://arxiv.org/abs/2512.24601) — the Recursive Language Model pattern for long-context processing.
