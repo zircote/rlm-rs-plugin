@@ -4,11 +4,16 @@
 [![Claude Code Plugin](https://img.shields.io/badge/Claude_Code-Plugin-orange)](https://github.com/anthropics/claude-code)
 [![Rust CLI](https://img.shields.io/badge/Backend-Rust-b7410e)](https://github.com/zircote/rlm)
 [![arXiv](https://img.shields.io/badge/arXiv-2512.24601-b31b1b.svg)](https://arxiv.org/abs/2512.24601)
+[![Docs](https://img.shields.io/badge/Docs-Starlight-5f43e9.svg)](https://zircote.github.io/rlm-rs-plugin/)
 
 A Claude Code plugin that integrates the **rlm-rs** Rust CLI for processing documents that exceed typical context window limits using the Recursive Language Model (RLM) pattern.
 
 <p align="center">
-  <img src=".github/readme-infographic.png" alt="RLM Workflow" width="800">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/readme-infographic.svg">
+    <source media="(prefers-color-scheme: light)" srcset=".github/readme-infographic-light.svg">
+    <img src=".github/readme-infographic.svg" alt="RLM Workflow" width="800">
+  </picture>
 </p>
 
 ## Overview

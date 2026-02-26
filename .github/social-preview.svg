@@ -1,101 +1,96 @@
-<svg width="1280" height="640" viewBox="0 0 1280 640" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background gradient -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" width="1280" height="640">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0f172a"/>
-      <stop offset="50%" style="stop-color:#1e293b"/>
-      <stop offset="100%" style="stop-color:#0f172a"/>
+      <stop offset="0%" stop-color="#fafbfc"/>
+      <stop offset="100%" stop-color="#f0f1f3"/>
     </linearGradient>
     <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#f97316"/>
-      <stop offset="100%" style="stop-color:#fb923c"/>
-    </linearGradient>
-    <linearGradient id="rust" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#b7410e"/>
-      <stop offset="100%" style="stop-color:#ce422b"/>
+      <stop offset="0%" stop-color="#e07c24"/>
+      <stop offset="100%" stop-color="#d4a04a"/>
     </linearGradient>
   </defs>
 
   <!-- Background -->
   <rect width="1280" height="640" fill="url(#bg)"/>
 
-  <!-- Decorative grid pattern -->
-  <g opacity="0.05">
-    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#f97316" stroke-width="1"/>
-    </pattern>
-    <rect width="1280" height="640" fill="url(#grid)"/>
+  <!-- Subtle grid dots -->
+  <g fill="#d8dbe0" opacity="0.5">
+    <circle cx="80" cy="80" r="1.5"/><circle cx="160" cy="80" r="1.5"/>
+    <circle cx="240" cy="80" r="1.5"/><circle cx="80" cy="160" r="1.5"/>
+    <circle cx="160" cy="160" r="1.5"/><circle cx="240" cy="160" r="1.5"/>
+    <circle cx="1040" cy="80" r="1.5"/><circle cx="1120" cy="80" r="1.5"/>
+    <circle cx="1200" cy="80" r="1.5"/><circle cx="1040" cy="160" r="1.5"/>
+    <circle cx="1120" cy="160" r="1.5"/><circle cx="1200" cy="160" r="1.5"/>
+    <circle cx="1040" cy="560" r="1.5"/><circle cx="1120" cy="560" r="1.5"/>
+    <circle cx="1200" cy="560" r="1.5"/><circle cx="80" cy="560" r="1.5"/>
+    <circle cx="160" cy="560" r="1.5"/>
   </g>
 
-  <!-- Decorative circles representing chunks -->
-  <g opacity="0.15">
-    <circle cx="150" cy="120" r="60" fill="#f97316"/>
-    <circle cx="280" cy="180" r="45" fill="#fb923c"/>
-    <circle cx="180" cy="250" r="35" fill="#fdba74"/>
-    <circle cx="1100" cy="480" r="70" fill="#f97316"/>
-    <circle cx="1180" cy="400" r="40" fill="#fb923c"/>
-    <circle cx="1050" cy="540" r="30" fill="#fdba74"/>
+  <!-- Chunking visual: large doc -> chunks -> synthesis -->
+  <g transform="translate(860, 140)">
+    <!-- Large document block -->
+    <rect x="0" y="0" width="56" height="80" rx="4" fill="none" stroke="#b0b8c4" stroke-width="1.5"/>
+    <line x1="10" y1="15" x2="46" y2="15" stroke="#c8cdd4" stroke-width="2"/>
+    <line x1="10" y1="25" x2="40" y2="25" stroke="#c8cdd4" stroke-width="2"/>
+    <line x1="10" y1="35" x2="46" y2="35" stroke="#c8cdd4" stroke-width="2"/>
+    <line x1="10" y1="45" x2="34" y2="45" stroke="#c8cdd4" stroke-width="2"/>
+    <line x1="10" y1="55" x2="46" y2="55" stroke="#c8cdd4" stroke-width="2"/>
+    <line x1="10" y1="65" x2="38" y2="65" stroke="#c8cdd4" stroke-width="2"/>
+
+    <!-- Arrow down -->
+    <line x1="28" y1="88" x2="28" y2="120" stroke="#b0b8c4" stroke-width="1.5"/>
+    <polyline points="22,114 28,122 34,114" fill="none" stroke="#b0b8c4" stroke-width="1.5"/>
+
+    <!-- 3 chunk blocks -->
+    <rect x="-20" y="130" width="32" height="28" rx="3" fill="none" stroke="#e07c24" stroke-width="1.5"/>
+    <line x1="-13" y1="140" x2="5" y2="140" stroke="#e8a560" stroke-width="1.5"/>
+    <line x1="-13" y1="148" x2="2" y2="148" stroke="#e8a560" stroke-width="1.5"/>
+
+    <rect x="20" y="130" width="32" height="28" rx="3" fill="none" stroke="#e07c24" stroke-width="1.5"/>
+    <line x1="27" y1="140" x2="45" y2="140" stroke="#e8a560" stroke-width="1.5"/>
+    <line x1="27" y1="148" x2="42" y2="148" stroke="#e8a560" stroke-width="1.5"/>
+
+    <rect x="60" y="130" width="32" height="28" rx="3" fill="none" stroke="#e07c24" stroke-width="1.5"/>
+    <line x1="67" y1="140" x2="85" y2="140" stroke="#e8a560" stroke-width="1.5"/>
+    <line x1="67" y1="148" x2="82" y2="148" stroke="#e8a560" stroke-width="1.5"/>
+
+    <!-- Converging arrows -->
+    <line x1="-4" y1="166" x2="20" y2="190" stroke="#b0b8c4" stroke-width="1.5"/>
+    <line x1="36" y1="166" x2="28" y2="190" stroke="#b0b8c4" stroke-width="1.5"/>
+    <line x1="76" y1="166" x2="36" y2="190" stroke="#b0b8c4" stroke-width="1.5"/>
+    <polyline points="23,184 28,194 33,184" fill="none" stroke="#b0b8c4" stroke-width="1.5"/>
+
+    <!-- Synthesis result -->
+    <rect x="4" y="200" width="48" height="36" rx="4" fill="none" stroke="#3a8f6a" stroke-width="1.5"/>
+    <line x1="12" y1="213" x2="44" y2="213" stroke="#6ab894" stroke-width="2"/>
+    <line x1="12" y1="223" x2="38" y2="223" stroke="#6ab894" stroke-width="2"/>
+
+    <!-- Labels -->
+    <text x="110" y="44" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#9098a8">Document</text>
+    <text x="110" y="148" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#e07c24">Chunks</text>
+    <text x="110" y="222" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#3a8f6a">Synthesis</text>
   </g>
 
-  <!-- Connection lines representing recursion -->
-  <g stroke="#f97316" stroke-width="2" opacity="0.2">
-    <path d="M 150 120 Q 300 200 280 180"/>
-    <path d="M 280 180 Q 200 280 180 250"/>
-    <path d="M 1100 480 Q 1150 420 1180 400"/>
-    <path d="M 1100 480 Q 1060 520 1050 540"/>
+  <!-- Text content -->
+  <text x="100" y="250" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="64" font-weight="700" fill="#1a1a2e" letter-spacing="-1">RLM-RS Plugin</text>
+  <text x="100" y="305" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="26" fill="#5a6070">Recursive Language Model for Claude Code</text>
+
+  <!-- Accent line -->
+  <rect x="100" y="330" width="80" height="3" rx="1.5" fill="url(#accent)"/>
+
+  <!-- Feature tags -->
+  <g font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="16" fill="#6a7080">
+    <text x="100" y="378">Chunk &amp; Conquer</text>
+    <circle cx="218" cy="374" r="2" fill="#d0d4da"/>
+    <text x="230" y="378">Hybrid Search</text>
+    <circle cx="342" cy="374" r="2" fill="#d0d4da"/>
+    <text x="354" y="378">Distributed Analysis</text>
+    <circle cx="510" cy="374" r="2" fill="#d0d4da"/>
+    <text x="522" y="378">Synthesis</text>
   </g>
 
-  <!-- Main content area -->
-  <g transform="translate(100, 180)">
-    <!-- Plugin icon representation -->
-    <g transform="translate(0, 60)">
-      <!-- Document stack -->
-      <rect x="0" y="20" width="80" height="100" rx="8" fill="#334155" stroke="#475569" stroke-width="2"/>
-      <rect x="10" y="10" width="80" height="100" rx="8" fill="#475569" stroke="#64748b" stroke-width="2"/>
-      <rect x="20" y="0" width="80" height="100" rx="8" fill="#64748b" stroke="#94a3b8" stroke-width="2"/>
-
-      <!-- Arrow indicating processing -->
-      <path d="M 130 50 L 180 50 L 165 35 M 180 50 L 165 65" stroke="url(#accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-
-      <!-- Chunk representation -->
-      <g transform="translate(210, 0)">
-        <rect x="0" y="0" width="30" height="30" rx="4" fill="url(#rust)"/>
-        <rect x="40" y="0" width="30" height="30" rx="4" fill="url(#rust)"/>
-        <rect x="0" y="40" width="30" height="30" rx="4" fill="url(#rust)"/>
-        <rect x="40" y="40" width="30" height="30" rx="4" fill="url(#rust)"/>
-        <rect x="0" y="80" width="30" height="30" rx="4" fill="url(#rust)"/>
-        <rect x="40" y="80" width="30" height="30" rx="4" fill="url(#rust)"/>
-      </g>
-    </g>
-
-    <!-- Title -->
-    <text x="380" y="40" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="bold" fill="#f8fafc">rlm-rs-plugin</text>
-
-    <!-- Subtitle -->
-    <text x="380" y="100" font-family="system-ui, -apple-system, sans-serif" font-size="28" fill="#94a3b8">Claude Code Plugin</text>
-
-    <!-- Description -->
-    <text x="380" y="170" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#cbd5e1">Process documents 100x larger than context limits</text>
-    <text x="380" y="210" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#cbd5e1">using Recursive Language Model pattern</text>
-  </g>
-
-  <!-- Feature badges at bottom -->
-  <g transform="translate(100, 500)">
-    <rect x="0" y="0" width="180" height="44" rx="22" fill="#1e293b" stroke="#334155" stroke-width="2"/>
-    <text x="90" y="28" font-family="system-ui, -apple-system, sans-serif" font-size="16" fill="#f97316" text-anchor="middle">Rust CLI Backend</text>
-
-    <rect x="200" y="0" width="200" height="44" rx="22" fill="#1e293b" stroke="#334155" stroke-width="2"/>
-    <text x="300" y="28" font-family="system-ui, -apple-system, sans-serif" font-size="16" fill="#f97316" text-anchor="middle">Semantic Chunking</text>
-
-    <rect x="420" y="0" width="180" height="44" rx="22" fill="#1e293b" stroke="#334155" stroke-width="2"/>
-    <text x="510" y="28" font-family="system-ui, -apple-system, sans-serif" font-size="16" fill="#f97316" text-anchor="middle">SQLite Storage</text>
-
-    <rect x="620" y="0" width="180" height="44" rx="22" fill="#1e293b" stroke="#334155" stroke-width="2"/>
-    <text x="710" y="28" font-family="system-ui, -apple-system, sans-serif" font-size="16" fill="#f97316" text-anchor="middle">Sub-LLM Agents</text>
-  </g>
-
-  <!-- GitHub corner -->
-  <g transform="translate(1180, 540)">
-    <text font-family="system-ui, -apple-system, sans-serif" font-size="18" fill="#64748b">zircote/rlm-rs-plugin</text>
-  </g>
+  <!-- Bottom -->
+  <text x="100" y="530" font-family="ui-monospace, 'SF Mono', monospace" font-size="15" fill="#8890a0">github.com/zircote/rlm-rs-plugin</text>
+  <rect x="100" y="546" width="130" height="24" rx="4" fill="#b7410e" opacity="0.1"/>
+  <text x="115" y="563" font-family="ui-monospace, 'SF Mono', monospace" font-size="13" fill="#b7410e">arXiv:2512.24601</text>
 </svg>
