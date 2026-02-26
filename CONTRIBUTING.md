@@ -51,7 +51,8 @@ rlm-rs-plugin/
 │       └── SKILL.md      # Chunking strategy guide
 ├── hooks/                # (future) Event hooks
 ├── docs/
-│   └── ARCHITECTURE.md   # Architecture documentation
+│   ├── ARCHITECTURE.md       # Architecture documentation
+│   └── TECHNICAL-OVERVIEW.md # Technical deep-dive
 ├── README.md
 └── CONTRIBUTING.md
 ```

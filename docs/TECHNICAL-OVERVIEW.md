@@ -1,7 +1,7 @@
 # RLM-RS Technical Overview
 
 > **Status:** Early development / Experimental
-> **Version:** 1.0.0
+> **Version:** 1.2.0 (Unreleased)
 > **Last Updated:** January 2026
 
 ## Introduction

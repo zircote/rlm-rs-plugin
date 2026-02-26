@@ -1,6 +1,6 @@
 # RLM state
 .rlm/
-
+.fastembed_cache/
 # Plugin local settings
 .claude/*.local.md
 
@@ -10,3 +10,4 @@
 # Test/temp files
 EX-*.txt
 PLAN-*.md
+*.csv
