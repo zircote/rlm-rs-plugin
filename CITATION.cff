@@ -1,0 +1,94 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "RLM-RS Plugin for Claude Code"
+abstract: >-
+  A Claude Code plugin that integrates the rlm-rs Rust CLI for processing
+  documents that exceed typical context window limits using the Recursive
+  Language Model (RLM) pattern. Supports multiple chunking strategies,
+  hybrid semantic and BM25 search, pass-by-reference chunk retrieval,
+  and sub-LLM delegation for coherent large-document analysis.
+version: 1.1.0
+date-released: "2025-01-19"
+license: MIT
+url: "https://github.com/zircote/rlm-rs-plugin"
+repository-code: "https://github.com/zircote/rlm-rs-plugin"
+authors:
+  - family-names: Allen
+    given-names: Robert
+    email: zircote@gmail.com
+    orcid: "https://orcid.org/0009-0007-9691-004X"
+identifiers:
+  - type: url
+    value: "https://github.com/zircote/rlm-rs-plugin"
+    description: "GitHub repository"
+keywords:
+  - claude-code
+  - plugin
+  - recursive-language-model
+  - rlm
+  - chunking
+  - large-context
+  - rust
+  - hybrid-search
+  - semantic-search
+  - bm25
+preferred-citation:
+  type: software
+  title: "RLM-RS Plugin for Claude Code"
+  abstract: >-
+    A Claude Code plugin that integrates the rlm-rs Rust CLI for processing
+    documents that exceed typical context window limits using the Recursive
+    Language Model (RLM) pattern.
+  version: 1.1.0
+  date-released: "2025-01-19"
+  license: MIT
+  url: "https://github.com/zircote/rlm-rs-plugin"
+  repository-code: "https://github.com/zircote/rlm-rs-plugin"
+  authors:
+    - family-names: Allen
+      given-names: Robert
+      email: zircote@gmail.com
+      orcid: "https://orcid.org/0009-0007-9691-004X"
+references:
+  - type: software
+    title: "rlm-rs"
+    abstract: >-
+      Recursive Language Model (RLM) CLI for Claude Code - handles long-context
+      tasks via chunking and recursive sub-LLM calls. The Rust backend that this
+      plugin wraps.
+    license: MIT
+    url: "https://github.com/zircote/rlm-rs"
+    repository-code: "https://github.com/zircote/rlm-rs"
+    authors:
+      - family-names: Allen
+        given-names: Robert
+        email: zircote@gmail.com
+        orcid: "https://orcid.org/0009-0007-9691-004X"
+  - type: software
+    title: "Claude Code RLM"
+    abstract: >-
+      Original Python implementation of the Recursive Language Model pattern
+      for Claude Code that inspired the creation of rlm-rs and this plugin.
+    url: "https://github.com/brainqub3/claude_code_RLM"
+    repository-code: "https://github.com/brainqub3/claude_code_RLM"
+    authors:
+      - alias: Brainqub3
+  - type: article
+    title: "Recursive Language Models"
+    abstract: >-
+      RLMs treat long prompts as part of an external environment and allow the
+      LLM to programmatically examine, decompose, and recursively call itself
+      over snippets of the prompt. RLMs can handle inputs up to two orders of
+      magnitude beyond model context windows.
+    url: "https://arxiv.org/abs/2512.24601"
+    year: 2025
+    authors:
+      - family-names: Zhang
+        given-names: Alex L.
+      - family-names: Kraska
+        given-names: Tim
+      - family-names: Khattab
+        given-names: Omar
+    institution:
+      name: "MIT CSAIL"
