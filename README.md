@@ -146,6 +146,31 @@ Based on the [RLM paper (arXiv:2512.24601)](https://arxiv.org/abs/2512.24601):
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidelines.
 
+## Citing This Project
+
+If you use this software in your research or work, please cite it using GitHub's built-in "Cite this repository" button, or use the following BibTeX entry:
+
+```bibtex
+@software{allen_rlm_rs_plugin,
+  author       = {Allen, Robert},
+  title        = {{RLM-RS Plugin for Claude Code}},
+  version      = {1.1.0},
+  date         = {2025-01-19},
+  url          = {https://github.com/zircote/rlm-rs-plugin},
+  license      = {MIT}
+}
+```
+
+## Acknowledgments
+
+This project builds on the following work:
+
+> Zhang, A. L., Kraska, T., & Khattab, O. (2025). *Recursive Language Models*. MIT CSAIL. [arXiv:2512.24601](https://arxiv.org/abs/2512.24601)
+
+> Brainqub3. *Claude Code RLM* — Original Python RLM implementation. [github.com/brainqub3/claude_code_RLM](https://github.com/brainqub3/claude_code_RLM)
+
+> Allen, R. *rlm-rs* — Recursive Language Model CLI for Claude Code (Rust). [github.com/zircote/rlm-rs](https://github.com/zircote/rlm-rs)
+
 ## License
 
 MIT
